@@ -17,6 +17,7 @@
 		3A4F3B002BA9FBEC000624FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A4F3AFF2BA9FBEC000624FB /* Main.storyboard */; };
 		3A4F3B022BA9FE1E000624FB /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4F3B012BA9FE1E000624FB /* MainViewController.swift */; };
 		3A4F3B062BAA0542000624FB /* CharacterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4F3B052BAA0542000624FB /* CharacterCell.swift */; };
+		3A5EE1C62BAD72E5003AA4B4 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 3A5EE1C52BAD72E5003AA4B4 /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A5EE1C62BAD72E5003AA4B4 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,6 +145,9 @@
 			dependencies = (
 			);
 			name = "Rick and Morty v.2";
+			packageProductDependencies = (
+				3A5EE1C52BAD72E5003AA4B4 /* Alamofire */,
+			);
 			productName = "Rick and Morty v.2";
 			productReference = 3A4F3ADF2BA9F707000624FB /* Rick and Morty v.2.app */;
 			productType = "com.apple.product-type.application";
@@ -171,6 +176,9 @@
 				Base,
 			);
 			mainGroup = 3A4F3AD62BA9F707000624FB;
+			packageReferences = (
+				3A5EE1C42BAD72E5003AA4B4 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = 3A4F3AE02BA9F707000624FB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -423,6 +431,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3A5EE1C42BAD72E5003AA4B4 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = exactVersion;
+				version = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3A5EE1C52BAD72E5003AA4B4 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A5EE1C42BAD72E5003AA4B4 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3A4F3AD72BA9F707000624FB /* Project object */;
 }

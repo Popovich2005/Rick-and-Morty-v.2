@@ -10,13 +10,15 @@ import UIKit
 final class MainViewController: UITableViewController {
     
     private var charactersResult: [Character] = []
-//    private let networkManager = NetworkManager.shared
+    private let networkManager = NetworkManager.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.rowHeight = 180
+        tableView.rowHeight = 100
         
-        fetchCharacter()
+        
+        
+        fetchAllCharacter()
         setNavigationTitle()
     }
     
@@ -52,40 +54,41 @@ final class MainViewController: UITableViewController {
         imageView.image = UIImage(named: "1")
         self.navigationItem.titleView = imageView
     }
+    
+    private func showAlert(withTitle title: String, andMessage message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
+    }
 }
 
 // MARK: - Networking
 extension MainViewController {
-    private func fetchCharacter() {
-        URLSession.shared.dataTask(
-            with: Link.characterURL.url
-        ) { [unowned self] (data, _, error) in
-            guard let data = data else { return }
-            do {
-                let characters = try JSONDecoder().decode(AllCharacter.self, from: data)
-                charactersResult = characters.results
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    print(characters.results)
-                }
-            } catch let error {
-                print(error.localizedDescription)
+    private func fetchAllCharacter() {
+        networkManager.fetchAllCharacter(from: Link.characterURL.url) { [unowned self] result in
+            switch result {
+            case .success(let result):
+                charactersResult = result
+                tableView.reloadData()
+            case .failure(let error):
+                showAlert(withTitle: "Oops...", andMessage: error.localizedDescription)
             }
-        }.resume()
+        }
+        
+        //    private func fetchCharacter() {
+        //        networkManager.fetchAllCharacter(from: Link.characterURL.url) { [unowned self] result in
+        //            switch result {
+        //            case .success(let result):
+        //                charactersResult = result.results
+        //                tableView.reloadData()
+        //            case .failure(let error):
+        //                print(error)
+        //            }
+        //        }
+        //    }
     }
-    
-//    private func fetchCharacter() {
-//        networkManager.fetchAllCharacter(from: Link.characterURL.url) {[unowned self] result in
-//            switch result {
-//            case .success(let result):
-//                charactersResult = result.results
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//    }
 }
-
 
 
 

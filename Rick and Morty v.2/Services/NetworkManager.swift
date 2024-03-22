@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 enum Link {
     case characterURL
@@ -17,50 +18,59 @@ enum Link {
         }
     }
 }
-enum NetworkError: Error {
-    case invalidURL
-    case noData
-    case decodingError
-}
 
 final class NetworkManager {
     static let shared = NetworkManager()
     
     private init() {}
     
-    func fetchImage(from url: URL, completion: @escaping(Result<Data, NetworkError>) -> Void) {
-        DispatchQueue.global().async {
-            guard let imageData = try? Data(contentsOf: url) else {
-                completion(.failure(.noData))
-                return
-            }
-            DispatchQueue.main.async {
-                completion(.success(imageData))
-            }
-        }
-    }
+//    func fetchData(from url: String, completion: @escaping(Result<Data, AFError>) -> Void) {
+//        AF.request(url)
+//            .validate()
+//            .responseData { response in
+//                switch response.result {
+//                case .success(let data):
+//                    completion(.success(data))
+//                case .failure(let error):
+//                    print(error)
+//                    completion(.failure(error))
+//                }
+//            }
+//    }
     
-    func fetchAllCharacter(
-        from url: URL,
-        completion: @escaping(
-            Result<AllCharacter, NetworkError>
-        ) -> Void
-    ) {
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            guard let data else {
-                print(error?.localizedDescription ?? "No error description")
-                completion(.failure(.noData))
-                return
-            }
-            do {
-                let dataModel = try JSONDecoder().decode(AllCharacter.self, from: data)
-                DispatchQueue.main.async {
-                    completion(.success(dataModel))
-                    print(dataModel)
+//    func fetchAllCharacter(
+//        from url: URL,
+//        completion: @escaping(Result<AllCharacter, NetworkError>) -> Void) {
+//        URLSession.shared.dataTask(with: url) { data, _, error in
+//            guard let data else {
+//                print(error?.localizedDescription ?? "No error description")
+//                completion(.failure(.noData))
+//                return
+//            }
+//            do {
+//                let dataModel = try JSONDecoder().decode(AllCharacter.self, from: data)
+//                DispatchQueue.main.async {
+//                    completion(.success(dataModel))
+//                    print(dataModel)
+//                }
+//            } catch {
+//                completion(.failure(.decodingError))
+//            }
+//        }.resume()
+//    }
+    
+    func fetchAllCharacter(from url: URL, completion: @escaping(Result<[Character], AFError>) -> Void) {
+        AF.request(url)
+            .validate()
+            .responseJSON { dataResponse in
+                switch dataResponse.result {
+                case .success(let value):
+                    let allCharacter = Character.getAllCharacter(from: value)
+                    completion(.success(allCharacter))
+                case .failure(let error):
+                    print(error)
+                    completion(.failure(error))
                 }
-            } catch {
-                completion(.failure(.decodingError))
             }
-        }.resume()
     }
 }
