@@ -13,7 +13,6 @@ final class CharacterViewController: UIViewController {
     @IBOutlet var characterLabel: UILabel! {
         didSet {
             characterLabel.text = characterResult.description
-//            characterImage.layer.cornerRadius = 15
         }
     }
     var characterResult: Character!
@@ -24,20 +23,22 @@ final class CharacterViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.title = characterResult.name
                 
-//        fethImage()
+        fetchImage()
         setBackgroundColor()
     }
     
-//    private func fethImage() {
-//        networkManager.fetchImage(from:characterResult.image ) { [unowned self] result in
-//            switch result {
-//            case .success(let imageData):
-//                characterImage.image = UIImage(data: imageData)
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//    }
+    private func fetchImage() {
+        networkManager.fetchData(from: characterResult.image) {[unowned self] result in
+            switch result {
+            case .success(let imageData):
+                characterImage.layer.cornerRadius = 15
+                characterImage.image = UIImage(data: imageData)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
     private func setBackgroundColor() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = view.bounds

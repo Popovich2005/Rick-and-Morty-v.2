@@ -31,7 +31,7 @@ final class CharacterCell: UITableViewCell {
     }
     func configure(with character: Character) {
         characterDetailsLabel.text = character.name
-        networkManager.fetchImage(from: character.image) { [unowned self] result in
+        networkManager.fetchData(from: character.image) { [unowned self] result in
             switch result {
             case .success(let imageData):
                 characterImage.layer.cornerRadius = characterImage.frame.width / 2
