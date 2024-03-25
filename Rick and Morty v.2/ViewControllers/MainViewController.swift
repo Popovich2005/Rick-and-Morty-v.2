@@ -9,7 +9,7 @@ import UIKit
 
 final class MainViewController: UITableViewController {
     
-    private var charactersResult: AllCharacter?
+    private var charactersResult: [Character]?
     private let networkManager = NetworkManager.shared
     
     override func viewDidLoad() {
@@ -22,7 +22,8 @@ final class MainViewController: UITableViewController {
     
 // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        charactersResult?.results.count ?? 0
+//        charactersResult?.results.count ?? 0
+        charactersResult?.count ?? 0
     }
     
     override func tableView(
@@ -31,7 +32,7 @@ final class MainViewController: UITableViewController {
     ) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "characterCell", for: indexPath)
         guard let cell = cell as? CharacterCell else { return UITableViewCell() }
-        let character = charactersResult?.results[indexPath.row] ?? Character(characterDetails: [:])
+        let character = charactersResult?[indexPath.row] ?? Character(characterDetails: [:])
         cell.configure(with: character)
         
         return cell
@@ -41,7 +42,7 @@ final class MainViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let indexPath = tableView.indexPathForSelectedRow else { return }
         let characterVC = segue.destination as? CharacterViewController
-        characterVC?.characterResult = charactersResult?.results[indexPath.row]
+        characterVC?.characterResult = charactersResult?[indexPath.row]
     }
     
 // MARK: - Private Metods

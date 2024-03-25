@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct Character: Decodable {
+struct Character {
     let name: String
     let status: String
     let species: String
     let type: String
-    var gender: String
-    var origin: Location
-    var location: Location
+    let gender: String
+    let origin: Location
+    let location: Location
     let image: String
     
     var description: String {
@@ -34,42 +34,41 @@ struct Character: Decodable {
         species = characterDetails["species"] as? String ?? ""
         type = characterDetails["type"] as? String ?? ""
         gender = characterDetails["gender"] as? String ?? ""
-        origin = Location(
-            name: characterDetails["origin"] as? String ?? "",
-            url: characterDetails["url"] as? String ?? ""
-        )
-        location = Location(
-            name: characterDetails["location"] as? String ?? "",
-            url: characterDetails["url"] as? String ?? ""
-        )
+        
+        let locationDetails = characterDetails["location"] as? [String: String] ?? [:]
+        location = Location(locationDetails: locationDetails)
+        
+        let originDetails = characterDetails["origin"] as? [String: String] ?? [:]
+        origin = Location(locationDetails: originDetails)
+        
         image = characterDetails["image"] as? String ?? ""
     }
+    static func getAllCharacter(from value: Any) -> [Character] {
+        guard let value = value as? [String: Any] else { return [] }
+        guard let results = value["results"] as? [[String: Any]] else { return [] }
+        return results.map { Character(characterDetails: $0) }
+    }
 }
 
-struct Location: Decodable {
-    var name: String
-    var url: String
+struct Location {
+    let name: String
+    let url: String
     
-    init(name: String, url: String) {
-        self.name = name
-        self.url = url
+    init(locationDetails: [String: String]) {
+        name = locationDetails["name"] ?? ""
+        url = locationDetails["URl"] ?? ""
     }
-    
-//    init(locationDetails: [String: Any]) {
-//        name = locationDetails["name"] as? String ?? ""
-//        url = locationDetails["URl"] as? String ?? ""
+}
+
+//struct AllCharacter: Decodable {
+//    let results: [Character]
+//
+//    static func getAllCharacter(from value: Any) -> AllCharacter {
+//        guard let dict = value as? [String: Any],
+//              let characters = dict["results"],
+//              let characterDetails = characters as? [[String: Any]]
+//        else { return AllCharacter(results: []) }
+//        
+//        return AllCharacter(results: characterDetails.map{ Character(characterDetails: $0)} )
 //    }
-}
-
-struct AllCharacter: Decodable {
-    let results: [Character]
-
-    static func getAllCharacter(from value: Any) -> AllCharacter {
-        guard let dict = value as? [String: Any],
-              let characters = dict["results"],
-              let characterDetails = characters as? [[String: Any]]
-        else { return AllCharacter(results: []) }
-        
-        return AllCharacter(results: characterDetails.map{ Character(characterDetails: $0)} )
-    }
-}
+//}

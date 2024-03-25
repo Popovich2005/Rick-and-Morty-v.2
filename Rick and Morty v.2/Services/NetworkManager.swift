@@ -38,13 +38,13 @@ final class NetworkManager {
             }
     }
     
-    func fetchAllCharacter(from url: URL, completion: @escaping(Result<AllCharacter, AFError>) -> Void) {
+    func fetchAllCharacter(from url: URL, completion: @escaping(Result<[Character], AFError>) -> Void) {
         AF.request(url)
             .validate()
             .responseJSON { dataResponse in
                 switch dataResponse.result {
                 case .success(let value):
-                    let allCharacter = AllCharacter.getAllCharacter(from: value)
+                    let allCharacter = Character.getAllCharacter(from: value)
                     completion(.success(allCharacter))
                     print(allCharacter)
                 case .failure(let error):
